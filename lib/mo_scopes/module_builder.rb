@@ -9,10 +9,11 @@ module MoScopes
       attribute_type = model_class.column_for_attribute(attribute).type
 
       unless attribute_type
-        raise Error.new(
-          "Unrecognized attribute. #{attribute.inspect} was passed to mo_scopes_for but this " \
-          "attribute does not exist on #{model_class.name}. Please check and fix."
-        )
+        raise Error, <<~ERROR.split("\n").join(" ")
+          Unrecognized attribute. #{attribute.inspect} was passed to mo_scopes_for
+          but this attribute does not exist on #{model_class.name}. Please check
+          and fix.
+        ERROR
       end
 
       scope_klass = [
@@ -24,10 +25,11 @@ module MoScopes
       ].detect { |scope_klass| scope_klass.matches?(model_class, attribute, attribute_type) }
 
       unless scope_klass
-        raise Error.new(
-          "Unsupported attribute. #{attribute.inspect} can not be used with MoScopes as it is of " \
-          "type #{attribute_type.inspect} and this is not supported."
-        )
+        raise Error, <<~ERROR.split("\n").join(" ")
+          Unsupported attribute. #{attribute.inspect} can not be used with
+          MoScopes as it is of type #{attribute_type.inspect} and this is not
+          supported.
+        ERROR
       end
 
       scope_klass.for(model_class.name, attribute)
@@ -41,10 +43,10 @@ module MoScopes
     # module with scopes to query with date ranges.
     def self.build_for_pair_of_attributes(model_class, attributes_tuple)
       unless attributes_tuple.size == 2
-        raise Error.new(
-          "Invalid number of attributes provided as a range. Expected two attributes to represent a " \
-          "range but got #{attributes_tuple.size}"
-        )
+        raise Error, <<~ERROR.split("\n").join(" ")
+          Invalid number of attributes provided as a range. Expected two attributes
+          to represent a range but got #{attributes_tuple.size}
+        ERROR
       end
 
       starts_at_attribute, ends_at_attribute = attributes_tuple
@@ -59,7 +61,11 @@ module MoScopes
         ends_at_attribute,
         ends_at_type
       )
-        raise Error, "Invalid attributes for date range scopes. #{starts_at_attribute} and/or #{ends_at_attribute} are not a date or datetime and so MoScopes can not create date range scopes for them."
+        raise Error, <<~ERROR.split("\n").join(" ")
+          Invalid attributes for date range scopes. #{starts_at_attribute} and/or
+          #{ends_at_attribute} are not a date or datetime and so MoScopes can not
+          create date range scopes for them.
+        ERROR
       end
 
       MoScopes::DateRangeScopes.for(model_class.name, starts_at_attribute, ends_at_attribute)
