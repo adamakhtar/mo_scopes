@@ -14,13 +14,12 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
   ActiveSupport::TestCase.fixtures :all
 end
 
-
 class ActiveSupport::TestCase
-  def create_event(attrs={})
+  def create_event(attrs = {})
     Event.create!(valid_event_attrs(attrs))
   end
 
-  def valid_event_attrs(attrs={})
+  def valid_event_attrs(attrs = {})
     {
       title: "Develper Meetup",
       description: "A great event to meet new friends",

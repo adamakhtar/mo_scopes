@@ -1,7 +1,6 @@
 require "test_helper"
 
 class MoScopes::StringScopesTest < ActiveSupport::TestCase
-
   setup do
     @developer_meetup = create_event(title: "Developer Bash")
     @designer_meetup = create_event(title: "Designer Party")

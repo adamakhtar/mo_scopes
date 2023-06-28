@@ -1,8 +1,7 @@
 module MoScopes
   class BooleanScopes < Module
-
     def self.matches?(model_class, attribute, attribute_type)
-      :boolean == attribute_type
+      attribute_type == :boolean
     end
 
     def self.for(model_name, attribute)
@@ -12,20 +11,20 @@ module MoScopes
         extend ActiveSupport::Concern
 
         included do
-          scope "#{attribute}_is_true", -> () {
-            self.where("#{attribute} IS ?", true)
+          scope "#{attribute}_is_true", -> {
+            where("#{attribute} IS ?", true)
           }
 
-          scope "#{attribute}_is_false", -> () {
-            self.where("#{attribute} IS ?", false)
+          scope "#{attribute}_is_false", -> {
+            where("#{attribute} IS ?", false)
           }
 
-          scope "#{attribute}_is_nil_or_false", -> () {
-            self.where("#{attribute} IS ? OR #{attribute} IS NULL", false)
+          scope "#{attribute}_is_nil_or_false", -> {
+            where("#{attribute} IS ? OR #{attribute} IS NULL", false)
           }
 
-          scope "#{attribute}_is_nil", -> () {
-            self.where("#{attribute} IS NULL")
+          scope "#{attribute}_is_nil", -> {
+            where("#{attribute} IS NULL")
           }
         end
       end
@@ -34,5 +33,3 @@ module MoScopes
     end
   end
 end
-
-

@@ -8,25 +8,29 @@ module MoScopes
     def self.build_for_single_attribute(model_class, attribute)
       attribute_type = model_class.column_for_attribute(attribute).type
 
-      raise Error.new(
-        "Unrecognized attribute. #{attribute.inspect} was passed to mo_scopes_for but this "\
-        "attribute does not exist on #{model_class.name}. Please check and fix."
-      ) unless attribute_type
+      unless attribute_type
+        raise Error.new(
+          "Unrecognized attribute. #{attribute.inspect} was passed to mo_scopes_for but this " \
+          "attribute does not exist on #{model_class.name}. Please check and fix."
+        )
+      end
 
       scope_klass = [
         EnumScopes, # must come before the NumericScopes as enums are integer column backed
         StringScopes,
         DateScopes,
         NumericScopes,
-        BooleanScopes,
-      ].detect {|scope_klass| scope_klass.matches?(model_class, attribute, attribute_type) }
+        BooleanScopes
+      ].detect { |scope_klass| scope_klass.matches?(model_class, attribute, attribute_type) }
 
-      raise Error.new(
-        "Unsupported attribute. #{attribute.inspect} can not be used with MoScopes as it is of "\
-        "type #{attribute_type.inspect} and this is not supported."
-      ) unless scope_klass
+      unless scope_klass
+        raise Error.new(
+          "Unsupported attribute. #{attribute.inspect} can not be used with MoScopes as it is of " \
+          "type #{attribute_type.inspect} and this is not supported."
+        )
+      end
 
-      return scope_klass.for(model_class.name, attribute)
+      scope_klass.for(model_class.name, attribute)
     end
 
     # Determines relevant scopes to be generated for given pair of attribute
@@ -36,10 +40,12 @@ module MoScopes
     # E.g. given attributes starts_at and ends_at that are both :datetime it will create a
     # module with scopes to query with date ranges.
     def self.build_for_pair_of_attributes(model_class, attributes_tuple)
-      raise Error.new(
-        "Invalid number of attributes provided as a range. Expected two attributes to represent a "\
-        "range but got #{attributes_tuple.size}"
-      ) unless attributes_tuple.size == 2
+      unless attributes_tuple.size == 2
+        raise Error.new(
+          "Invalid number of attributes provided as a range. Expected two attributes to represent a " \
+          "range but got #{attributes_tuple.size}"
+        )
+      end
 
       starts_at_attribute, ends_at_attribute = attributes_tuple
 
@@ -56,7 +62,7 @@ module MoScopes
         raise Error, "Invalid attributes for date range scopes. #{starts_at_attribute} and/or #{ends_at_attribute} are not a date or datetime and so MoScopes can not create date range scopes for them."
       end
 
-      return MoScopes::DateRangeScopes.for(model_class.name, starts_at_attribute, ends_at_attribute)
+      MoScopes::DateRangeScopes.for(model_class.name, starts_at_attribute, ends_at_attribute)
     end
   end
 end

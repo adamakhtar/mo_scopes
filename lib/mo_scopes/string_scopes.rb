@@ -11,27 +11,27 @@ module MoScopes
         extend ActiveSupport::Concern
 
         included do
-          scope "#{attribute}_starting", -> (term, case_sensitive=false) {
+          scope "#{attribute}_starting", ->(term, case_sensitive = false) {
             if case_sensitive
-              self.where("#{attribute} LIKE ?", "#{term}%")
+              where("#{attribute} LIKE ?", "#{term}%")
             else
-              self.where("#{attribute} ILIKE ?", "#{term}%")
+              where("#{attribute} ILIKE ?", "#{term}%")
             end
           }
 
-          scope "#{attribute}_ending", -> (term, case_sensitive: false) {
+          scope "#{attribute}_ending", ->(term, case_sensitive: false) {
             if case_sensitive
-              self.where("#{attribute} LIKE ?", "%#{term}")
+              where("#{attribute} LIKE ?", "%#{term}")
             else
-              self.where("#{attribute} ILIKE ?", "%#{term}")
+              where("#{attribute} ILIKE ?", "%#{term}")
             end
           }
 
-          scope "#{attribute}_containing", -> (term, case_sensitive: false) {
+          scope "#{attribute}_containing", ->(term, case_sensitive: false) {
             if case_sensitive
-              self.where("#{attribute} LIKE ?", "%#{term}%")
+              where("#{attribute} LIKE ?", "%#{term}%")
             else
-              self.where("#{attribute} ILIKE ?", "%#{term}%")
+              where("#{attribute} ILIKE ?", "%#{term}%")
             end
           }
         end
@@ -41,5 +41,3 @@ module MoScopes
     end
   end
 end
-
-

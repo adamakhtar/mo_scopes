@@ -11,20 +11,20 @@ module MoScopes
         extend ActiveSupport::Concern
 
         included do
-          scope "#{attribute}_is", -> (enum) {
-            self.where("#{attribute}": enum)
+          scope "#{attribute}_is", ->(enum) {
+            where("#{attribute}": enum)
           }
 
-          scope "#{attribute}_is_any", -> (*enums) {
-            self.where("#{attribute}": enums)
+          scope "#{attribute}_is_any", ->(*enums) {
+            where("#{attribute}": enums)
           }
 
-          scope "#{attribute}_is_not", -> (enum) {
-            self.where.not("#{attribute}": enum)
+          scope "#{attribute}_is_not", ->(enum) {
+            where.not("#{attribute}": enum)
           }
 
-          scope "#{attribute}_is_not_any", -> (*enums) {
-            self.where.not("#{attribute}": enums)
+          scope "#{attribute}_is_not_any", ->(*enums) {
+            where.not("#{attribute}": enums)
           }
         end
       end
@@ -33,5 +33,3 @@ module MoScopes
     end
   end
 end
-
-

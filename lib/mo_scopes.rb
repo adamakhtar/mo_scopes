@@ -24,6 +24,3 @@ module MoScopes
     end
   end
 end
-
-
-

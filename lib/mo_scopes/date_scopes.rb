@@ -11,28 +11,28 @@ module MoScopes
         extend ActiveSupport::Concern
 
         included do
-          scope "#{attribute}_before", -> (datetime) {
-            self.where("#{attribute} < ?", datetime)
+          scope "#{attribute}_before", ->(datetime) {
+            where("#{attribute} < ?", datetime)
           }
 
-          scope "#{attribute}_before_or_at", -> (datetime) {
-            self.where("#{attribute} <= ?", datetime)
+          scope "#{attribute}_before_or_at", ->(datetime) {
+            where("#{attribute} <= ?", datetime)
           }
 
-          scope "#{attribute}_after", -> (datetime) {
-            self.where("#{attribute} > ?", datetime)
+          scope "#{attribute}_after", ->(datetime) {
+            where("#{attribute} > ?", datetime)
           }
 
-          scope "#{attribute}_after_or_at", -> (datetime) {
-            self.where("#{attribute} >= ?", datetime)
+          scope "#{attribute}_after_or_at", ->(datetime) {
+            where("#{attribute} >= ?", datetime)
           }
 
-          scope "#{attribute}_between", -> (start, finish) {
-            self.where("#{attribute} > :start AND #{attribute} < :finish", start: start, finish: finish)
+          scope "#{attribute}_between", ->(start, finish) {
+            where("#{attribute} > :start AND #{attribute} < :finish", start: start, finish: finish)
           }
 
-          scope "#{attribute}_between_or_at", -> (start, finish) {
-            self.where("#{attribute} BETWEEN :start AND :finish", start: start, finish: finish)
+          scope "#{attribute}_between_or_at", ->(start, finish) {
+            where("#{attribute} BETWEEN :start AND :finish", start: start, finish: finish)
           }
         end
       end

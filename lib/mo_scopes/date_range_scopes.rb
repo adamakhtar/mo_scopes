@@ -15,10 +15,9 @@ module MoScopes
         extend ActiveSupport::Concern
 
         included do
-
           # start_at_and_ends_At_within
-          scope "#{start_at_attribute}_and_#{ends_at_attribute}_within", -> (starts_at, ends_at) {
-            self.where(
+          scope "#{start_at_attribute}_and_#{ends_at_attribute}_within", ->(starts_at, ends_at) {
+            where(
               "#{start_at_attribute} >= ? AND #{ends_at_attribute} <= ?",
               starts_at,
               ends_at
@@ -26,8 +25,8 @@ module MoScopes
           }
 
           # start_at_and_ends_at_overlapping
-          scope "#{start_at_attribute}_and_#{ends_at_attribute}_overlapping", -> (starts_at, ends_at) {
-            self.where(
+          scope "#{start_at_attribute}_and_#{ends_at_attribute}_overlapping", ->(starts_at, ends_at) {
+            where(
               "#{start_at_attribute} < ? AND #{ends_at_attribute} > ?",
               starts_at,
               ends_at
@@ -40,9 +39,9 @@ module MoScopes
     end
 
     def self.prepare_module_name(model_name, starts_at_attribute, ends_at_attribute)
-      "#{model_name}"\
-      "#{starts_at_attribute.to_s.camelize}"\
-      "#{ends_at_attribute.to_s.camelize}"\
+      "#{model_name}" \
+      "#{starts_at_attribute.to_s.camelize}" \
+      "#{ends_at_attribute.to_s.camelize}" \
       "DateRangeScopes"
     end
   end

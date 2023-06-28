@@ -11,32 +11,32 @@ module MoScopes
         extend ActiveSupport::Concern
 
         included do
-          scope "#{attribute}_eq", -> (value) {
-            self.where("#{attribute} = ?", value)
+          scope "#{attribute}_eq", ->(value) {
+            where("#{attribute} = ?", value)
           }
 
-          scope "#{attribute}_lt", -> (value) {
-            self.where("#{attribute} < ?", value)
+          scope "#{attribute}_lt", ->(value) {
+            where("#{attribute} < ?", value)
           }
 
-          scope "#{attribute}_lte", -> (value) {
-            self.where("#{attribute} <= ?", value)
+          scope "#{attribute}_lte", ->(value) {
+            where("#{attribute} <= ?", value)
           }
 
-          scope "#{attribute}_gt", -> (value) {
-            self.where("#{attribute} > ?", value)
+          scope "#{attribute}_gt", ->(value) {
+            where("#{attribute} > ?", value)
           }
 
-          scope "#{attribute}_gte", -> (value) {
-            self.where("#{attribute} >= ?", value)
+          scope "#{attribute}_gte", ->(value) {
+            where("#{attribute} >= ?", value)
           }
 
-          scope "#{attribute}_between", -> (start, finish) {
-            self.where("#{attribute} > :start AND #{attribute} < :finish", start: start, finish: finish)
+          scope "#{attribute}_between", ->(start, finish) {
+            where("#{attribute} > :start AND #{attribute} < :finish", start: start, finish: finish)
           }
 
-          scope "#{attribute}_between_or_equal", -> (start, finish) {
-            self.where("#{attribute} BETWEEN :start AND :finish", start: start, finish: finish)
+          scope "#{attribute}_between_or_equal", ->(start, finish) {
+            where("#{attribute} BETWEEN :start AND :finish", start: start, finish: finish)
           }
         end
       end
