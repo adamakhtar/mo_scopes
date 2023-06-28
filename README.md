@@ -1,5 +1,6 @@
 # MoScopes
-Short description and motivation.
+
+**Not ready for use.** Still a work in progress.
 
 ## Usage
 How to use my plugin.
