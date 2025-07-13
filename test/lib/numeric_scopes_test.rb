@@ -1,3 +1,5 @@
+require "test_helper"
+
 class MoScopes::NumericScopesTest < ActiveSupport::TestCase
   test "attribute_eq" do
     event_a = create_event(price: 10)

@@ -1,43 +1,35 @@
 module MoScopes
   class DateScopes < Module
-    def self.matches?(model_class, attribute, attribute_type)
-      [:date, :datetime].include?(attribute_type)
+    def initialize(attribute)
+      @attribute = attribute
     end
 
-    def self.for(model_name, attribute)
-      mod = const_set("#{model_name}#{attribute.to_s.camelize}Scopes", Module.new)
+    def included(model)
+      date_attribute = @attribute
 
-      mod.module_eval do
-        extend ActiveSupport::Concern
+      model.scope "#{date_attribute}_before", ->(datetime) {
+        where("#{date_attribute} < ?", datetime)
+      }
 
-        included do
-          scope "#{attribute}_before", ->(datetime) {
-            where("#{attribute} < ?", datetime)
-          }
+      model.scope "#{date_attribute}_before_or_at", ->(datetime) {
+        where("#{date_attribute} <= ?", datetime)
+      }
 
-          scope "#{attribute}_before_or_at", ->(datetime) {
-            where("#{attribute} <= ?", datetime)
-          }
+      model.scope "#{date_attribute}_after", ->(datetime) {
+        where("#{date_attribute} > ?", datetime)
+      }
 
-          scope "#{attribute}_after", ->(datetime) {
-            where("#{attribute} > ?", datetime)
-          }
+      model.scope "#{date_attribute}_after_or_at", ->(datetime) {
+        where("#{date_attribute} >= ?", datetime)
+      }
 
-          scope "#{attribute}_after_or_at", ->(datetime) {
-            where("#{attribute} >= ?", datetime)
-          }
+      model.scope "#{date_attribute}_between", ->(start, finish) {
+        where("#{date_attribute} > :start AND #{date_attribute} < :finish", start: start, finish: finish)
+      }
 
-          scope "#{attribute}_between", ->(start, finish) {
-            where("#{attribute} > :start AND #{attribute} < :finish", start: start, finish: finish)
-          }
-
-          scope "#{attribute}_between_or_at", ->(start, finish) {
-            where("#{attribute} BETWEEN :start AND :finish", start: start, finish: finish)
-          }
-        end
-      end
-
-      mod
+      model.scope "#{date_attribute}_between_or_at", ->(start, finish) {
+        where("#{date_attribute} BETWEEN :start AND :finish", start: start, finish: finish)
+      }
     end
   end
 end

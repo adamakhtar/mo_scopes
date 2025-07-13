@@ -1,12 +1,11 @@
 class Event < ApplicationRecord
-  include MoScopes
+  include MoScopes::StringScopes.new(:title)
+  include MoScopes::BooleanScopes.new(:published)
+  include MoScopes::NumericScopes.new(:price)
+  include MoScopes::DateScopes.new(:starts_at)
+  include MoScopes::DateScopes.new(:ends_at)
+  include MoScopes::EnumScopes.new(:status)
+  include MoScopes::DateRangeScopes.new(:starts_at, :ends_at)
 
   enum :status, [:draft, :published, :archived]
-
-  mo_scopes_for(:title)
-  mo_scopes_for(:starts_at)
-  mo_scopes_for(:price)
-  mo_scopes_for(:published)
-  mo_scopes_for(:status)
-  mo_scopes_for([:starts_at, :ends_at])
 end

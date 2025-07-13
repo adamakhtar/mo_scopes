@@ -1,7 +1,6 @@
 require "mo_scopes/version"
 require "mo_scopes/engine"
 
-require "mo_scopes/module_builder"
 require "mo_scopes/string_scopes"
 require "mo_scopes/date_scopes"
 require "mo_scopes/date_range_scopes"

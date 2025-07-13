@@ -1,35 +1,28 @@
 module MoScopes
   class BooleanScopes < Module
-    def self.matches?(model_class, attribute, attribute_type)
-      attribute_type == :boolean
+
+    def initialize(attribute)
+      @attribute = attribute
     end
 
-    def self.for(model_name, attribute)
-      mod = const_set("#{model_name}#{attribute.to_s.camelize}Scopes", Module.new)
+    def included(model)
+      boolean_attribute = @attribute
 
-      mod.module_eval do
-        extend ActiveSupport::Concern
+      model.scope "#{boolean_attribute}_is_true", -> {
+        where("#{boolean_attribute} IS ?", true)
+      }
 
-        included do
-          scope "#{attribute}_is_true", -> {
-            where("#{attribute} IS ?", true)
-          }
+      model.scope "#{boolean_attribute}_is_false", -> {
+        where("#{boolean_attribute} IS ?", false)
+      }
 
-          scope "#{attribute}_is_false", -> {
-            where("#{attribute} IS ?", false)
-          }
+      model.scope "#{boolean_attribute}_is_nil_or_false", -> {
+        where("#{boolean_attribute} IS ? OR #{boolean_attribute} IS NULL", false)
+      }
 
-          scope "#{attribute}_is_nil_or_false", -> {
-            where("#{attribute} IS ? OR #{attribute} IS NULL", false)
-          }
-
-          scope "#{attribute}_is_nil", -> {
-            where("#{attribute} IS NULL")
-          }
-        end
-      end
-
-      mod
+      model.scope "#{boolean_attribute}_is_nil", -> {
+        where("#{boolean_attribute} IS NULL")
+      }
     end
   end
 end

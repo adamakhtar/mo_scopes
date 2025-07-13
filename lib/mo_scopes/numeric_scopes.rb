@@ -1,47 +1,40 @@
 module MoScopes
   class NumericScopes < Module
-    def self.matches?(model_class, attribute, attribute_type)
-      [:integer, :float].include?(attribute_type)
+
+    def initialize(attribute)
+      @attribute = attribute
     end
 
-    def self.for(model_name, attribute)
-      mod = const_set("#{model_name}#{attribute.to_s.camelize}Scopes", Module.new)
+    def included(model)
+      numeric_attribute = @attribute
 
-      mod.module_eval do
-        extend ActiveSupport::Concern
+      model.scope "#{numeric_attribute}_eq", ->(value) {
+        where("#{numeric_attribute} = ?", value)
+      }
 
-        included do
-          scope "#{attribute}_eq", ->(value) {
-            where("#{attribute} = ?", value)
-          }
+      model.scope "#{numeric_attribute}_lt", ->(value) {
+        where("#{numeric_attribute} < ?", value)
+      }
 
-          scope "#{attribute}_lt", ->(value) {
-            where("#{attribute} < ?", value)
-          }
+      model.scope "#{numeric_attribute}_lte", ->(value) {
+        where("#{numeric_attribute} <= ?", value)
+      }
 
-          scope "#{attribute}_lte", ->(value) {
-            where("#{attribute} <= ?", value)
-          }
+      model.scope "#{numeric_attribute}_gt", ->(value) {
+        where("#{numeric_attribute} > ?", value)
+      }
 
-          scope "#{attribute}_gt", ->(value) {
-            where("#{attribute} > ?", value)
-          }
+      model.scope "#{numeric_attribute}_gte", ->(value) {
+        where("#{numeric_attribute} >= ?", value)
+      }
 
-          scope "#{attribute}_gte", ->(value) {
-            where("#{attribute} >= ?", value)
-          }
+      model.scope "#{numeric_attribute}_between", ->(start, finish) {
+        where("#{numeric_attribute} > :start AND #{numeric_attribute} < :finish", start: start, finish: finish)
+      }
 
-          scope "#{attribute}_between", ->(start, finish) {
-            where("#{attribute} > :start AND #{attribute} < :finish", start: start, finish: finish)
-          }
-
-          scope "#{attribute}_between_or_equal", ->(start, finish) {
-            where("#{attribute} BETWEEN :start AND :finish", start: start, finish: finish)
-          }
-        end
-      end
-
-      mod
+      model.scope "#{numeric_attribute}_between_or_equal", ->(start, finish) {
+        where("#{numeric_attribute} BETWEEN :start AND :finish", start: start, finish: finish)
+      }
     end
   end
 end

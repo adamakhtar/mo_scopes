@@ -1,3 +1,5 @@
+require "test_helper"
+
 class MoScopes::DateScopesTest < ActiveSupport::TestCase
   setup do
     freeze_time

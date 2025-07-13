@@ -1,43 +1,35 @@
 module MoScopes
   class StringScopes < Module
-    def self.matches?(model_class, attribute, attribute_type)
-      [:string, :text].include?(attribute_type)
+    def initialize(attribute)
+      @attribute = attribute
     end
 
-    def self.for(model_name, attribute)
-      mod = const_set("#{model_name}#{attribute.to_s.camelize}Scopes", Module.new)
+    def included(model)
+      string_attribute = @attribute
 
-      mod.module_eval do
-        extend ActiveSupport::Concern
-
-        included do
-          scope "#{attribute}_starting", ->(term, case_sensitive = false) {
-            if case_sensitive
-              where("#{attribute} LIKE ?", "#{term}%")
-            else
-              where("#{attribute} ILIKE ?", "#{term}%")
-            end
-          }
-
-          scope "#{attribute}_ending", ->(term, case_sensitive: false) {
-            if case_sensitive
-              where("#{attribute} LIKE ?", "%#{term}")
-            else
-              where("#{attribute} ILIKE ?", "%#{term}")
-            end
-          }
-
-          scope "#{attribute}_containing", ->(term, case_sensitive: false) {
-            if case_sensitive
-              where("#{attribute} LIKE ?", "%#{term}%")
-            else
-              where("#{attribute} ILIKE ?", "%#{term}%")
-            end
-          }
+      model.scope "#{string_attribute}_starting", ->(term, case_sensitive = false) {
+        if case_sensitive
+          where("#{string_attribute} LIKE ?", "#{term}%")
+        else
+          where("#{string_attribute} ILIKE ?", "#{term}%")
         end
-      end
+      }
 
-      mod
+      model.scope "#{string_attribute}_ending", ->(term, case_sensitive = false) {
+        if case_sensitive
+          where("#{string_attribute} LIKE ?", "%#{term}")
+        else
+          where("#{string_attribute} ILIKE ?", "%#{term}")
+        end
+      }
+
+      model.scope "#{string_attribute}_containing", ->(term, case_sensitive = false) {
+        if case_sensitive
+          where("#{string_attribute} LIKE ?", "%#{term}%")
+        else
+          where("#{string_attribute} ILIKE ?", "%#{term}%")
+        end
+      }
     end
   end
 end

@@ -1,4 +1,6 @@
-class MoScopes::DateScopesTest < ActiveSupport::TestCase
+require "test_helper"
+
+class MoScopes::DateRangeScopesTest < ActiveSupport::TestCase
   setup do
     freeze_time
   end
