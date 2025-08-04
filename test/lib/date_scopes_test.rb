@@ -45,6 +45,13 @@ class MoScopes::DateScopesTest < ActiveSupport::TestCase
     assert_equal [event_a], Event.starts_at_after_or_at(10.hours.from_now - 1.second)
   end
 
+  test "attribute_is_nil" do
+    event_a = create_event(starts_at: nil)
+    _event_b = create_event(starts_at: 5.hours.from_now)
+
+    assert_equal [event_a], Event.starts_at_is_nil
+  end
+
   test "attribute_between" do
     event_a = create_event(starts_at: 10.hours.from_now)
     event_b = create_event(starts_at: 20.hours.from_now)

@@ -30,6 +30,10 @@ module MoScopes
       model.scope "#{date_attribute}_between_or_at", ->(start, finish) {
         where("#{date_attribute} BETWEEN :start AND :finish", start: start, finish: finish)
       }
+
+      model.scope "#{date_attribute}_is_nil", -> {
+        where("#{date_attribute} IS NULL")
+      }
     end
   end
 end
