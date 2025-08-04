@@ -7,19 +7,23 @@ class MoScopes::BooleanScopesTest < ActiveSupport::TestCase
     @nil_event = create_event(published: nil)
   end
 
-  test "attribute_is_true" do
-    assert_equal [@true_event], Event.published_is_true
+  test "published: published attribute is true" do
+    assert_equal [@true_event], Event.published
   end
 
-  test "attribute_is_false" do
-    assert_equal [@false_event], Event.published_is_false
+  test "not_published: published attribute is false" do
+    assert_equal [@false_event], Event.not_published
   end
 
-  test "attribute_is_nil_or_false" do
-    assert_equal [@false_event, @nil_event], Event.published_is_nil_or_false
+  test "published_or_nil: published attribute is true or nil" do
+    assert_equal [@true_event, @nil_event], Event.published_or_nil
   end
 
-  test "attribute_is_nil" do
+  test "not_published_or_nil: published attribute is false or nil" do
+    assert_equal [@false_event, @nil_event], Event.not_published_or_nil
+  end
+
+  test "published_is_nil: published attribute is nil" do
     assert_equal [@nil_event], Event.published_is_nil
   end
 end
