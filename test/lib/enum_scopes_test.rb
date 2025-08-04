@@ -2,24 +2,24 @@ require "test_helper"
 
 class MoScopes::EnumScopesTest < ActiveSupport::TestCase
   setup do
-    @draft_event = create_event(status: :draft)
-    @published_event = create_event(status: :published)
-    @archived_event = create_event(status: :archived)
+    @pending_event = create_event(status: :pending)
+    @approved_event = create_event(status: :approved)
+    @rejected_event = create_event(status: :rejected)
   end
 
   test "attribute_is" do
-    assert_equal [@draft_event], Event.status_is(:draft)
+    assert_equal [@pending_event], Event.status_is(:pending)
   end
 
   test "attribute_is_not" do
-    assert_equal [@published_event, @archived_event], Event.status_is_not(:draft)
+    assert_equal [@approved_event, @rejected_event], Event.status_is_not(:pending)
   end
 
   test "attribute_is_any" do
-    assert_equal [@draft_event, @archived_event], Event.status_is_any(:draft, :archived)
+    assert_equal [@pending_event, @approved_event], Event.status_is_any(:pending, :approved)
   end
 
   test "attribute_is_not_any" do
-    assert_equal [@published_event], Event.status_is_not_any(:draft, :archived)
+    assert_equal [@rejected_event], Event.status_is_not_any(:pending, :approved)
   end
 end

@@ -27,7 +27,7 @@ class ActiveSupport::TestCase
       ends_at: 2.weeks.from_now + 1.hour,
       price: 1000,
       published: true,
-      status: :draft
+      status: :pending
     }.merge(attrs)
   end
 end

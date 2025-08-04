@@ -7,5 +7,5 @@ class Event < ApplicationRecord
   include MoScopes::EnumScopes.new(:status)
   include MoScopes::DateRangeScopes.new(:starts_at, :ends_at)
 
-  enum :status, [:draft, :published, :archived]
+  enum :status, [:pending, :approved, :rejected]
 end
